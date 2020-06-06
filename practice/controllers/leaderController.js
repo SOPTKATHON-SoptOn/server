@@ -5,36 +5,6 @@ let resMessage = require('../modules/responseMessage');
 const crypto = require('crypto');
 
 module.exports={
-    //회원가입
-signup : async (req, res) => {
-    const {
-        user_name, user_part, user_id, password, user_fn,user_score, user_birth
-    } = req.body;
-    // request data 확인 - 없다면 Bad Request 반환
-    if (!user_name || !user_part || !user_id || !password || !user_fn || !user_birth) {
-        res.status(statusCode.BAD_REQUEST)
-            .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
-        return;
-    }
-    //already ID
-    const idx1 = await User.checkUser(user_id);
-    if (idx1===true) {
-        res.status(statusCode.BAD_REQUEST)
-            .send(util.fail(statusCode.BAD_REQUEST, resMessage.ALREADY_ID));
-        return;
-    }
-
-    //const salt = crypto.randomBytes(32).toString('hex');
-   
-    const idx = await User.signup(user_name, user_part, user_birth, user_id, password, user_fn, user_score);
-    if (idx === -1) {
-        return res.status(statusCode.DB_ERROR)
-            .send(util.fail(statusCode.DB_ERROR, resMessage.DB_ERROR));
-    }
-    return res.status(statusCode.OK)
-        .send(util.success(statusCode.OK, resMessage.CREATED_USER, {userId: idx}));
-},
-
 //로그인
 signin : async (req, res) => {
     // request body 에서 데이터 가져오기
